@@ -22,7 +22,7 @@ const signUp = async (data: {
   username: string;
   password: string;
 }) => {
-  await api.post("sign-up", data);
+  await api.post("auth/sign-up", data);
 };
 
 function SignUp() {
