@@ -1,5 +1,6 @@
 "use client";
 
+import { api } from "@/app/lib/api";
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
@@ -21,7 +22,7 @@ const signUp = async (data: {
   username: string;
   password: string;
 }) => {
-  await axios.post("127.0.0.1", data);
+  await api.post("sign-up", data);
 };
 
 function SignUp() {
