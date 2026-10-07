@@ -8,18 +8,41 @@ import {
   Form,
   Input,
   Label,
+  Spinner,
   TextField,
 } from "@heroui/react";
-import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import React, { FormEvent, useState } from "react";
+
+const signUp = async (data: {
+  email: string;
+  username: string;
+  password: string;
+}) => {
+  await axios.post("127.0.0.1", data);
+};
 
 function SignUp() {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
 
+  const mutation = useMutation({ mutationFn: signUp });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate({
+      email,
+      username,
+      password,
+    });
+  };
+
   return (
     <div className="w-dvw h-dvh flex justify-center items-center">
-      <Form className="flex w-96 flex-col gap-4 ">
+      <Form onSubmit={handleSubmit} className="flex w-96 flex-col gap-4 ">
         <TextField
           isRequired
           name="email"
@@ -37,6 +60,25 @@ function SignUp() {
         >
           <Label>Email</Label>
           <Input placeholder="john@example.com" />
+          <FieldError />
+        </TextField>
+        <TextField
+          isRequired
+          name="username"
+          type="username"
+          value={username}
+          onChange={(e) => {
+            setUsername(e);
+          }}
+          validate={(value) => {
+            if (value.length < 3) {
+              return "Username must be more than 3 characters";
+            }
+            return null;
+          }}
+        >
+          <Label>Username</Label>
+          <Input placeholder="john" />
           <FieldError />
         </TextField>
         <TextField
@@ -91,9 +133,22 @@ function SignUp() {
         </TextField>
 
         <div className="flex gap-2">
-          <Button className={"w-full"} type="button">
-            <Check />
-            Sign In
+          <Button
+            className={"w-full"}
+            type="submit"
+            isDisabled={mutation.isPending}
+          >
+            {mutation.isPending ? (
+              <>
+                <Spinner color="current" size="sm" />
+                Signing In...
+              </>
+            ) : (
+              <>
+                <Check />
+                Sign In
+              </>
+            )}
           </Button>
         </div>
       </Form>
