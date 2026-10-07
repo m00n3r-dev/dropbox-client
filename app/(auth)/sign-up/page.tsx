@@ -4,6 +4,7 @@ import { Check } from "@gravity-ui/icons";
 import {
   Button,
   Description,
+  ErrorMessage,
   FieldError,
   Form,
   Input,
@@ -29,7 +30,9 @@ function SignUp() {
   const [password, setPassword] = useState("");
   const [verifyPassword, setVerifyPassword] = useState("");
 
-  const mutation = useMutation({ mutationFn: signUp });
+  const mutation = useMutation({
+    mutationFn: signUp,
+  });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -131,6 +134,12 @@ function SignUp() {
           </Description>
           <FieldError />
         </TextField>
+
+        {mutation.isError && axios.isAxiosError(mutation.error) && (
+          <ErrorMessage>
+            {mutation.error.response?.data?.message ?? "something went wrong"}
+          </ErrorMessage>
+        )}
 
         <div className="flex gap-2">
           <Button
