@@ -164,12 +164,12 @@ function SignUp() {
             {mutation.isPending ? (
               <>
                 <Spinner color="current" size="sm" />
-                Signing In...
+                Signing Up...
               </>
             ) : (
               <>
                 <Check />
-                Sign In
+                Sign Up
               </>
             )}
           </Button>
