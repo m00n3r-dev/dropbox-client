@@ -14,8 +14,11 @@ import {
 import React, { useState } from "react";
 import NextLink from "next/link";
 import { useMutation } from "@tanstack/react-query";
+import { api } from "@/app/lib/api";
 
-const signIn = async () => {};
+const signIn = async (data: { email: string; password: string }) => {
+  await api.post("auth/sign-in", data);
+};
 
 function SingIn() {
   const [email, setEmail] = useState("");
@@ -23,9 +26,14 @@ function SingIn() {
 
   const mutation = useMutation({ mutationFn: signIn });
 
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate({ email, password });
+  };
+
   return (
     <div className="w-dvw h-dvh flex justify-center items-center">
-      <Form className="flex w-96 flex-col gap-4 ">
+      <Form onSubmit={onSubmit} className="flex w-96 flex-col gap-4 ">
         <TextField
           isRequired
           name="email"
@@ -55,7 +63,7 @@ function SingIn() {
             setPassword(e);
           }}
           validate={(value) => {
-            if (value.length) {
+            if (value.length < 8) {
               return "password must be at least 8 characters";
             }
             return null;
