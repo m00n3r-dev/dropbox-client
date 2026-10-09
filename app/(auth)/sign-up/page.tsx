@@ -16,8 +16,9 @@ import {
 } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
-import React, { FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import NextLink from "next/link";
+import { useRouter } from "next/navigation";
 
 const signUp = async (data: {
   email: string;
@@ -28,6 +29,8 @@ const signUp = async (data: {
 };
 
 function SignUp() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -35,6 +38,9 @@ function SignUp() {
 
   const mutation = useMutation({
     mutationFn: signUp,
+    onSuccess: () => {
+      router.push("sign-in");
+    },
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
