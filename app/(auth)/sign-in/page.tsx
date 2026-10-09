@@ -3,6 +3,7 @@
 import { Check } from "@gravity-ui/icons";
 import {
   Button,
+  ErrorMessage,
   FieldError,
   Form,
   Input,
@@ -15,6 +16,7 @@ import React, { useState } from "react";
 import NextLink from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/app/lib/api";
+import axios from "axios";
 
 const signIn = async (data: { email: string; password: string }) => {
   await api.post("auth/sign-in", data);
@@ -73,6 +75,12 @@ function SingIn() {
           <Input autoComplete="current-password webauthn" placeholder="" />
           <FieldError />
         </TextField>
+
+        {mutation.isError && axios.isAxiosError(mutation.error) && (
+          <ErrorMessage>
+            {mutation.error.response?.data?.message ?? "something went wrong"}
+          </ErrorMessage>
+        )}
 
         <NextLink href={"sign-up"}>
           <Link>
