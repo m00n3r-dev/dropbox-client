@@ -11,7 +11,7 @@ import {
 import { api } from "../lib/api";
 
 type User = {
-  id: string;
+  sub: string;
   username: string;
   email: string;
 };
@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshUser = useCallback(async () => {
     try {
       const response = await api.get("auth/me");
-      setUser(response.data.user);
+      setUser(response.data);
     } catch (error) {
       console.error("Failed to check authentication:", error);
       setUser(null);
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (() => {
       refreshUser();
     })();
-  },[refreshUser]);
+  }, [refreshUser]);
 
   return (
     <AuthContext.Provider value={{ user, loading, refreshUser, setUser }}>
