@@ -10,12 +10,14 @@ import {
   Form,
   Input,
   Label,
+  Link,
   Spinner,
   TextField,
 } from "@heroui/react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import React, { FormEvent, useState } from "react";
+import NextLink from "next/link";
 
 const signUp = async (data: {
   email: string;
@@ -142,6 +144,11 @@ function SignUp() {
           </ErrorMessage>
         )}
 
+        <NextLink href={"sign-in"}>
+          <Link>
+            Already have an account ? sign in <Link.Icon />{" "}
+          </Link>
+        </NextLink>
         <div className="flex gap-2">
           <Button
             className={"w-full"}
