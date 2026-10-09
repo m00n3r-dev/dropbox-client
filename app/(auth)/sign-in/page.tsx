@@ -17,16 +17,22 @@ import NextLink from "next/link";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "@/app/lib/api";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const signIn = async (data: { email: string; password: string }) => {
   await api.post("auth/sign-in", data);
 };
 
 function SingIn() {
+  const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const mutation = useMutation({ mutationFn: signIn });
+  const mutation = useMutation({
+    mutationFn: signIn,
+    onSuccess: () => router.push("/dashboard"),
+  });
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
